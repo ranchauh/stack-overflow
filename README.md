@@ -1,4 +1,4 @@
-# stack-overflow
+# My Stack Overflow
 A repository to create a competitor of stack overflow.
 
 Use cases:
