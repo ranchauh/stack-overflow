@@ -1,0 +1,11 @@
+.idea
+
+*.iml
+
+target/
+
+*.jar
+
+*.tar.*
+
+elasticsearch-7.6.0/

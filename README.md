@@ -1,7 +1,7 @@
 # My Stack Overflow
 A repository to create a competitor of stack overflow.
 
-Use cases:
+## Use cases:
 
 1) Top questions are to be shown in the home page
 
@@ -18,3 +18,11 @@ Use cases:
 7) User can search the tags and browse the questions by tags
 
 8) Users can search questions/answers by text.
+
+## Assumptions
+
+1) Top questions are sorted by latest update and are limited to top 50 questions.
+
+2) No provision for API security fow now.
+
+3) 
