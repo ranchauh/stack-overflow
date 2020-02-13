@@ -1,4 +1,4 @@
-package com.overflow.stack.update.service;
+package com.overflow.stack.service;
 
 import com.overflow.stack.es.model.Answer;
 import com.overflow.stack.update.repository.MongoAnswerRepository;

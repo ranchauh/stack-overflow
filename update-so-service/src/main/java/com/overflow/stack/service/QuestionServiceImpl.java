@@ -1,4 +1,4 @@
-package com.overflow.stack.update.service;
+package com.overflow.stack.service;
 
 import com.overflow.stack.es.model.Question;
 import com.overflow.stack.update.repository.MongoQuestionRepository;
@@ -18,10 +18,12 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     public Question save(Question question){
+        question.setCreateTimestamp(System.currentTimeMillis());
         return mongoQuestionRepository.insert(question);
     }
 
     public Question update(Question question){
+        question.setUpdateTimestamp(System.currentTimeMillis());
         return mongoQuestionRepository.save(question);
     }
 

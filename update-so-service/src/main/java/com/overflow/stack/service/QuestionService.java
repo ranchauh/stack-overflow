@@ -1,4 +1,4 @@
-package com.overflow.stack.update.service;
+package com.overflow.stack.service;
 
 import com.overflow.stack.es.model.Question;
 import org.springframework.stereotype.Service;

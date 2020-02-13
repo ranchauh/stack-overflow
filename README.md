@@ -23,6 +23,10 @@ Designing and implementation of a competitor of [Stack Overflow](https://stackov
 
 1) Top questions are sorted by latest update and are limited to top 50 questions.
 
-2) No provision for API security fow now.
+2) No provision for API security.
 
-3) 
+3) Tags are created while posting question. 
+
+4) Only tag names are supported not tag description.
+
+5) User searches not are supported.

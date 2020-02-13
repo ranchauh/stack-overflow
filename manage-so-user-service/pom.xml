@@ -11,19 +11,24 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>update-es-service</artifactId>
+    <artifactId>manage-so-user-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
-            <groupId>com.overflow.stack</groupId>
-            <artifactId>elasticsearch-util</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>1.50.5</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
+            <groupId>cz.jirutka.spring</groupId>
+            <artifactId>embedmongo-spring</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
     </dependencies>
-
+    
 </project>
