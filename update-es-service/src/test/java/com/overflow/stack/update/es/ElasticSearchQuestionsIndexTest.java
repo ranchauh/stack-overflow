@@ -41,7 +41,7 @@ public class ElasticSearchQuestionsIndexTest {
         //elasticsearchOperations.deleteIndex(Question.class);
         //elasticsearchOperations.createIndex(Question.class);
 
-        Question question1 = new Question();
+        Question question1 = Question.builder().build();
         question1.setQuestionId("question1");
         question1.setQuestionTitle("What is java?");
         question1.setQuestionDescription("Please tell me what is java");
@@ -51,7 +51,7 @@ public class ElasticSearchQuestionsIndexTest {
         question1.setUpdateTimestamp(System.currentTimeMillis());
         questionService.save(question1);
 
-        Question question = new Question();
+        Question question = Question.builder().build();
         question.setQuestionId("question2");
         question.setQuestionTitle("What is node.js?");
         question.setQuestionDescription("Please tell me what is node.js");

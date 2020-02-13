@@ -1,64 +1,23 @@
 package com.overflow.stack.search.service;
 
-import com.overflow.stack.search.model.SearchTagResult;
 import com.overflow.stack.es.model.Question;
-import com.overflow.stack.es.service.QuestionService;
-import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.overflow.stack.search.model.SearchTagResult;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Service
-public class SearchQuestionService {
+public interface SearchQuestionService {
 
-    @Autowired
-    private QuestionService questionService;
+    Page<Question> getTopQuestions(int pageNumber, int size);
 
-    public Page<Question> getTopQuestions(int pageNumber, int size){
-        return questionService.findLatest(PageRequest.of(pageNumber, size,
-                Sort.by("updateTimestamp").descending()));
-    }
+    Page<Question> searchQuestionsByText(String searchText, int pageNumber, int size);
 
-    public Page<Question> searchQuestionsByText(String searchText, int pageNumber, int size){
-        return questionService.findByText(searchText,PageRequest.of(pageNumber, size));
-    }
+    Page<Question> searchQuestionsByTag(String tag, int pageNumber, int size) ;
 
-    public Page<Question> searchQuestionsByTag(String tag, int pageNumber, int size) {
-        return questionService.findByTag(tag, PageRequest.of(pageNumber, size));
-    }
+    Optional<Question> getQuestionById(String questionId);
 
-    public Optional<Question> getQuestionById(String questionId){
-        return questionService.findById(questionId);
-    }
+    SearchTagResult searchTag();
 
-    public SearchTagResult searchTag(){
-        List<String> tags = questionService.findAllTags().stream()
-                .map(MultiBucketsAggregation.Bucket::getKeyAsString)
-                .collect(Collectors.toList());
-        return SearchTagResult.builder()
-                .tags(tags)
-                .build();
-    }
-
-    public SearchTagResult searchTag(String query){
-        List<String> tags = questionService.findAllTags().stream()
-                .map(MultiBucketsAggregation.Bucket::getKeyAsString)
-                .filter(t -> match(t,"*"+query+"*"))
-                .collect(Collectors.toList());
-        return SearchTagResult.builder()
-                .tags(tags)
-                .build();
-    }
-
-    private boolean match(String text, String pattern) {
-        return text.matches(pattern.replace("?", ".?").replace("*", ".*?"));
-    }
-
+    SearchTagResult searchTag(String query);
 
 }

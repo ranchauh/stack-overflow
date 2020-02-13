@@ -7,6 +7,7 @@ import com.overflow.stack.es.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,7 +26,7 @@ public class SearchQuestionController {
     @Autowired
     private SearchAnswerService searchAnswerService;
 
-    @GetMapping("")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<Question> getTopQuestions(@RequestParam(value = "query", required = false) String query,
                                           @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                           @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
@@ -36,21 +37,21 @@ public class SearchQuestionController {
         }
     }
 
-    @GetMapping("/tagged/{tagId}")
+    @GetMapping(value = "/tagged/{tagId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<Question> getTaggedQuestions(@PathVariable("tagId") String tagId,
                                              @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                              @RequestParam(value = "size", required = false, defaultValue = "50") int size){
         return searchQuestionService.searchQuestionsByTag(tagId,page,size);
     }
 
-    @GetMapping("/{questionId}")
+    @GetMapping(value = "/{questionId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Question getQuestion(@PathVariable("questionId") String questionId) {
         return searchQuestionService.getQuestionById(questionId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
 
-    @GetMapping("/{questionId}/answers")
+    @GetMapping(value = "/{questionId}/answers", produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<Answer> getAnswerByQuestionId(@PathVariable("questionId") String questionId,
                                               @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                               @RequestParam(value = "size", required = false, defaultValue = "50") int size){

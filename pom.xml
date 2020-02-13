@@ -10,9 +10,16 @@
     <groupId>com.overflow.stack</groupId>
     <artifactId>stack-overflow-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Stack Overflow</name>
     <description>A competitor of Stack Overflow</description>
     <packaging>pom</packaging>
+
+
+    <modules>
+        <module>elasticsearch-util</module>
+        <module>search-so-service</module>
+        <module>update-es-service</module>
+        <module>update-so-service</module>
+    </modules>
 
     <properties>
         <java.version>1.8</java.version>

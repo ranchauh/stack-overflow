@@ -33,7 +33,7 @@ public class ElasticSearchAnswersIndexTest {
 
     @Before
     public void before(){
-        Answer answer = new Answer();
+        Answer answer = Answer.builder().build();
         answer.setAnswerId("answer1");
         answer.setQuestionId("question1");
         answer.setAnswerText("Java is a dynamic programming language");
@@ -45,7 +45,7 @@ public class ElasticSearchAnswersIndexTest {
         answer.setVideoUrls(Collections.singletonList("videoUrl1"));
         answerService.save(answer);
 
-        answer = new Answer();
+        answer = Answer.builder().build();
         answer.setAnswerId("answer2");
         answer.setQuestionId("question2");
         answer.setAnswerText("Node.js is a backend language based on Javascript");

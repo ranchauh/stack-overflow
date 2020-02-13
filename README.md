@@ -1,5 +1,5 @@
 # My Stack Overflow
-A repository to create a competitor of stack overflow.
+Designing and implementation of a competitor of [Stack Overflow](https://stackoverflow.com/).
 
 ## Use cases:
 
