@@ -1,8 +1,8 @@
 package com.overflow.stack.update.es;
 
-import com.overflow.stack.es.SoElasticsearchConfiguration;
-import com.overflow.stack.es.model.Answer;
-import com.overflow.stack.es.service.AnswerService;
+import com.overflow.stack.commons.SoCommonsConfiguration;
+import com.overflow.stack.commons.model.Answer;
+import com.overflow.stack.commons.service.EsAnswerService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SoElasticsearchConfiguration.class)
+@ContextConfiguration(classes = SoCommonsConfiguration.class)
 @TestPropertySource(value = "classpath:application.properties")
 public class ElasticSearchAnswersIndexTest {
 
@@ -29,7 +29,7 @@ public class ElasticSearchAnswersIndexTest {
     private ElasticsearchOperations elasticsearchOperations;
 
     @Autowired
-    private AnswerService answerService;
+    private EsAnswerService esAnswerService;
 
     @Before
     public void before(){
@@ -41,9 +41,9 @@ public class ElasticSearchAnswersIndexTest {
         answer.setCreateTimestamp(System.currentTimeMillis());
         answer.setUpdateTimestamp(System.currentTimeMillis());
         answer.setPostedBy("user1");
-        answer.setImageUrls(Collections.singletonList("imageUrl1"));
-        answer.setVideoUrls(Collections.singletonList("videoUrl1"));
-        answerService.save(answer);
+        answer.setImageIds(Collections.singletonList("imageUrl1"));
+        answer.setVideoIds(Collections.singletonList("videoUrl1"));
+        esAnswerService.save(answer);
 
         answer = Answer.builder().build();
         answer.setAnswerId("answer2");
@@ -53,57 +53,57 @@ public class ElasticSearchAnswersIndexTest {
         answer.setCreateTimestamp(System.currentTimeMillis());
         answer.setUpdateTimestamp(System.currentTimeMillis());
         answer.setPostedBy("user1");
-        answer.setImageUrls(Collections.singletonList("imageUrl11"));
-        answer.setVideoUrls(Collections.singletonList("videoUrl11"));
+        answer.setImageIds(Collections.singletonList("imageUrl11"));
+        answer.setVideoIds(Collections.singletonList("videoUrl11"));
         answer.setParentAnswerId("answer1");
-        answerService.save(answer);
+        esAnswerService.save(answer);
     }
 
     @Test
     public void testFindById(){
-        Optional<Answer> answer = answerService.findById("answer1");
+        Optional<Answer> answer = esAnswerService.findById("answer1");
         Assert.assertTrue(answer.isPresent());
         Assert.assertEquals("answer1",answer.get().getAnswerId());
     }
 
     @Test
     public void testFindByText(){
-        Page<Answer> result = answerService.findByText("language", PageRequest.of(0, 10));
+        Page<Answer> result = esAnswerService.findByText("language", PageRequest.of(0, 10));
         Assert.assertEquals(2L,result.getTotalElements());
     }
 
     @Test
     public void testDeleteById(){
-        Page<Answer> result = answerService.findByText("language", PageRequest.of(0, 10));
+        Page<Answer> result = esAnswerService.findByText("language", PageRequest.of(0, 10));
         Assert.assertEquals(2L,result.getTotalElements());
 
         Answer answer = result.getContent().stream()
                 .findAny().get();
-        answerService.deleteById(answer.getAnswerId());
+        esAnswerService.deleteById(answer.getAnswerId());
 
-        result = answerService.findByText("what is", PageRequest.of(0, 10));
+        result = esAnswerService.findByText("what is", PageRequest.of(0, 10));
 
         Assert.assertEquals(1L,result.getTotalElements());
     }
 
     @Test
     public void testUpdateQuestion() throws IOException {
-        Page<Answer> result = answerService.findByText("language", PageRequest.of(0, 10));
+        Page<Answer> result = esAnswerService.findByText("language", PageRequest.of(0, 10));
         Assert.assertEquals(2L,result.getTotalElements());
 
         Answer answer = result.getContent().stream()
                 .findAny().get();
         answer.setAnswerText("Java is a runtime and dynamic programming language");
         answer.setVoteCount(3);
-        answerService.update(answer);
+        esAnswerService.update(answer);
 
-        result = answerService.findByText("language", PageRequest.of(0, 10, Sort.by("updateTimestamp").descending()));
+        result = esAnswerService.findByText("language", PageRequest.of(0, 10, Sort.by("updateTimestamp").descending()));
         Assert.assertEquals(2L,result.getTotalElements());
     }
 
     @Test
     public void testFindTopQuestions() throws IOException {
-        Page<Answer> result = answerService.findLatest(PageRequest.of(0, 1, Sort.by("updateTimestamp").descending()));
+        Page<Answer> result = esAnswerService.findLatest(PageRequest.of(0, 1, Sort.by("updateTimestamp").descending()));
         Assert.assertEquals(2L,result.getTotalElements());
         Assert.assertEquals(1L,result.getContent().size());
         Answer answer = result.getContent().stream()
@@ -113,7 +113,7 @@ public class ElasticSearchAnswersIndexTest {
 
     @Test
     public void testFindAnswersByParentAnswerId() {
-        Page<Answer> result = answerService.findByParentAnswerId("answer1",PageRequest.of(0, 1, Sort.by("updateTimestamp").descending()));
+        Page<Answer> result = esAnswerService.findByParentAnswerId("answer1",PageRequest.of(0, 1, Sort.by("updateTimestamp").descending()));
         Assert.assertEquals(1L,result.getTotalElements());
         Assert.assertEquals(1L,result.getContent().size());
         Answer answer = result.getContent().stream()

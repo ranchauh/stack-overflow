@@ -2,8 +2,8 @@ package com.overflow.stack.search.controller;
 
 import com.overflow.stack.search.service.SearchAnswerService;
 import com.overflow.stack.search.service.SearchQuestionService;
-import com.overflow.stack.es.model.Answer;
-import com.overflow.stack.es.model.Question;
+import com.overflow.stack.commons.model.Answer;
+import com.overflow.stack.commons.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class SearchQuestionController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Page<Question> getTopQuestions(@RequestParam(value = "query", required = false) String query,
                                           @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                          @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
+                                          @RequestParam(value = "size", required = false, defaultValue = "50") int size) {
         if(StringUtils.isEmpty(query)) {
             return searchQuestionService.getTopQuestions(page,size);
         }else {

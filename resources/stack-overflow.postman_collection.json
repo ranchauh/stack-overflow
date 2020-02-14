@@ -1,0 +1,842 @@
+{
+	"info": {
+		"_postman_id": "eff12456-af40-45c2-a91b-b7dd815dc8fb",
+		"name": "stack-overflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "search-so",
+			"item": [
+				{
+					"name": "get-top-questions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/v1/questions?page=0&size=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "50"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-questions-by-text",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost/api/v1/questions?query=sample",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "sample"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-questions-by-tag",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost/api/v1/questions/tagged/sample-tag1",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								"tagged",
+								"sample-tag1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-answers-by-question",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost/api/v1/questions/1/answers",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								"1",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-answers-by-text",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost/api/v1/answers?query=demo",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"answers"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "demo"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-answers-by-answerId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost/api/v1/answers/1",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"answers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-answers-by-parent-answer-id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost/api/v1/answers/1/answers",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"answers",
+								"1",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-all-tags",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"size\": 0,\n    \"aggs\": {\n        \"distinct_tags\": {\n            \"terms\": {\n            \t\t\"field\": \"tags\"\n        \t\t}\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/api/v1/tags",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-tags-by-search",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"size\": 0,\n    \"aggs\": {\n        \"distinct_tags\": {\n            \"terms\": {\n            \t\t\"field\": \"tags\"\n        \t\t}\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost/api/v1/tags?query=sample",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tags"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "sample"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-image-of-answer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/api/v1/answers/1/images/stack-overflow-high-level-design-updated.png",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"answers",
+								"1",
+								"images",
+								"stack-overflow-high-level-design-updated.png"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "manage-so",
+			"item": [
+				{
+					"name": "post-question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"questionTitle\": \"Sample question title for demo?\",\n    \"questionDescription\": \"This is sample question description for demo?\",\n    \"tags\": [\"sample-tag1\",\"sample-tag2\"],\n    \"postedBy\": \"user1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/v1/questions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "vote-question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/api/v1/questions/1/votes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								"1",
+								"votes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-question",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"questionTitle\": \"Updated - sample question title for demo?\",\n    \"questionDescription\": \"Updated - this is sample question description for demo?\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/v1/questions/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-question",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/api/v1/questions/53",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								"53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post-answer-to-question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"answerText\": \"This is answer to the samnple question for demo\",\n        \"postedBy\": \"user1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/v1/questions/1/answers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"questions",
+								"1",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post-answer-to-answer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"answerText\": \"This is answer to the answer of samnple question for demo\",\n        \"parentAnswerId\": \"1\",\n        \"postedBy\": \"user1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/v1/answers/1/answers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"answers",
+								"1",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-answer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"answerText\": \"Update - This is answer to the samnple question for demo\",\n        \"imageIds\": [\n        \t\"stack-overflow-high-level-design-updated.png\"\n        \t]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/v1/answers/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"answers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "vote-answer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/api/v1/answers/1/votes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"answers",
+								"1",
+								"votes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload-image-to-answer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/ranchauh/upskilling/stack-overflow/resources/stack-overflow-high-level-design-updated.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/v1/answers/1/images",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"v1",
+								"answers",
+								"1",
+								"images"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "elasticsearch",
+			"item": [
+				{
+					"name": "delete-index",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9200/answers",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-index",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"size\": 0,\n    \"aggs\": {\n        \"distinct_tags\": {\n            \"terms\": {\n            \t\t\"field\": \"tags\"\n        \t\t}\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9200/answers",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"answers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "manage-user",
+			"item": [
+				{
+					"name": "create-user",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\":\"user1\",\n\t\"emailId\": \"user1@gmail.com\",\n\t\"password\": \"secretPassword\",\n\t\"displayName\": \"User One\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find-user",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "http://localhost/api/v1/users/user1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"user1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-user",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userId\":\"user1\",\n\t\"emailId\": \"user1@gmail.com\",\n\t\"password\": \"NewSecretPassword\",\n\t\"displayName\": \"User One\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8084/api/v1/users/user1",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"user1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "localhost:8084/api/v1/users/user1",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"user1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "test",
+			"item": [
+				{
+					"name": "bulk-insert",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/v1/bulk/questions/answers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"v1",
+								"bulk",
+								"questions",
+								"answers"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

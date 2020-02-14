@@ -1,7 +1,7 @@
 # My Stack Overflow
 Designing and implementation of a competitor of [Stack Overflow](https://stackoverflow.com/).
 
-## Use cases:
+## Use cases
 
 1) Top questions are to be shown in the home page
 
@@ -23,28 +23,32 @@ Designing and implementation of a competitor of [Stack Overflow](https://stackov
 
 1) Top questions are sorted by latest update and are limited to top 50 questions.
 
-2) No provision for API security.
+2) No provision for authentication and authorization.
 
-3) Tags are created while posting question. 
+3) Tags are created only while posting question.
 
 4) Only tag names are supported not tag description.
 
 5) User searches are not supported.
 
+6) Only image upload is supported fow now under size 100 MB.
+
+7) Front end application not available as of now.
+
 ## High Level Design
 
-![Stack Overflow High Level Design](resources/stack-overflow-high-level-design.png)
+![Stack Overflow High Level Design](resources/stack-overflow-high-level-design-updated.png)
 
 ## Micro Services
 
 ### manage-so-user-service
 * Manages user registration and other user admin flow via REST endpoints.
-* Stores the user profile details in mongodb.
+* Stores the user profile details in database.
 
 ### update-so-service
 * Exposes REST endpoints to post, update and delete questions and answers.
 * Exposes REST endpoints to upload images and videos for answers.
-* Persists the questions and answers in mongodb.
+* Persists the questions and answers in database.
 * Persists the images and videos to AWS S3 bucket.
 * Publishes message to kafka topics for any change in questions and answers.
 
@@ -79,7 +83,7 @@ Designing and implementation of a competitor of [Stack Overflow](https://stackov
 ## Spring Boot
 To create MicroServices in Spring.
 
-## MongoDB
+## RDBMS
 To persist questions and answers.
 
 ## Apache Kafka
@@ -89,56 +93,96 @@ To publish and consume updates for questions and answers to update them in elast
 To create search indexes for questions and answers and fast and efficient search results.
 
 ## AWS S3
-To store static contents such as images and videos for answers.
+To store rich media contents such as images and videos for answers.
 
 ## nginx
-To enable load balancing and routing for all the microservices.
+To configure a proxy server and enable load balancing all the back-end MicroServices.
 
 ## ReactJS (Not finalized)
 To create user interface.
 
-# Datastore choice - NoSQL
-Chose NoSql database MongoDB to persist the data as its a document based NoSql which provides fast storage and retrieval of documents and it scales efficiently.
+# Datastore choice - RDBMS - 
+Chose RDBMS as data store because:
+* The data is relational. For example, answers are related to questions and other answers.
+* Since elasticsearch is used for the search. Less reads will be performed on DB. Hence, read performance is not a concern.
+* To solve the scalability issue, the database size can be considered large enough to accommodate the desired data.
 
 # Datastore Design
 ## User
-```json
-{
-    "userId": "string",
-    "emailId": "string",
-    "password": "secretString",
-    "displayName": "string"
-}
+```text
+CREATE TABLE SO_USER(
+    USER_ID VARCHAR(50) PRIMARY KEY,
+    EMAIL_ID VARCHAR(50) NOT NULL,
+    PASSWORD VARCHAR(50) NOT NULL,
+    DISPLAY_NAME VARCHAR(100),
+    UNIQUE KEY (EMAIL_ID)
+);
 ```
 
 ## Question
-```json
-{
-    "questionId": "string",
-    "questionTitle": "string",
-    "questionDescription": "string",
-    "tags": ["string","string"],
-    "voteCount": "long",
-    "createTimestamp": "long",
-    "updateTimestamp": "long",
-    "postedBy": "string"
-}
+```text
+CREATE TABLE QUESTION (
+    QUESTION_ID NUMERIC IDENTITY PRIMARY KEY,
+    QUESTION_TITLE VARCHAR(1000) NOT NULL,
+    QUESTION_DESCRIPTION CLOB,
+    VOTE_COUNT NUMERIC,
+    TAGS VARCHAR(1000),
+    CREATE_TIMESTAMP TIMESTAMP,
+    UPDATE_TIMESTAMP TIMESTAMP,
+    POSTED_BY VARCHAR(50) NOT NULL,
+    FOREIGN KEY (POSTED_BY) REFERENCES SO_USER(USER_ID)
+);
+```
+## Tag
+```text
+CREATE TABLE TAG (
+    TAG_NAME VARCHAR(50) PRIMARY KEY,
+    TAG_DESCRIPTION VARCHAR(1000),
+    CREATE_TIMESTAMP TIMESTAMP,
+    UPDATE_TIMESTAMP TIMESTAMP,
+    CREATED_BY VARCHAR(50) NOT NULL,
+    FOREIGN KEY (CREATED_BY) REFERENCES SO_USER(USER_ID)
+);
+```
+## QuestionTag
+```text
+CREATE TABLE QUESTION_TAG (
+    QUESTION_ID NUMERIC,
+    TAG_NAME VARCHAR(50),
+    CREATE_TIMESTAMP TIMESTAMP,
+    UPDATE_TIMESTAMP TIMESTAMP,
+    PRIMARY KEY (QUESTION_ID, TAG_NAME)
+);
 ```
 
 ## Answer
-```json
-{
-    "answerId": "string",
-    "questionId": "string",
-    "answerText": "string",
-    "parentAnswerId": "string",
-    "voteCount": "long",
-    "createTimestamp": "long",
-    "updateTimestamp": "long",
-    "postedBy": "string",
-    "imageUrls": ["string","string"],
-    "videoUrls": ["string","string"]
-}
+```text
+CREATE TABLE ANSWER (
+    ANSWER_ID NUMERIC IDENTITY PRIMARY KEY,
+    ANSWER_TEXT CLOB,
+    QUESTION_ID NUMERIC,
+    PARENT_ANSWER_ID NUMERIC,
+    VOTE_COUNT NUMERIC,
+    CREATE_TIMESTAMP TIMESTAMP,
+    UPDATE_TIMESTAMP TIMESTAMP,
+    POSTED_BY VARCHAR(50) NOT NULL,
+    FOREIGN KEY (POSTED_BY) REFERENCES SO_USER(USER_ID),
+    FOREIGN KEY (PARENT_ANSWER_ID) REFERENCES ANSWER(ANSWER_ID),
+    FOREIGN KEY (QUESTION_ID) REFERENCES QUESTION(QUESTION_ID)
+);
+```
+## RichContent
+```text
+CREATE TABLE RICH_CONTENT (
+    CONTENT_ID VARCHAR(100) PRIMARY KEY,
+    CONTENT_NAME VARCHAR(100) NOT NULL,
+    CONTENT_LOCATION VARCHAR(1000) NOT NULL,
+    ANSWER_ID NUMERIC NOT NULL,
+    CONTENT_TYPE VARCHAR(10) NOT NULL,
+    CREATE_TIMESTAMP TIMESTAMP,
+    UPDATE_TIMESTAMP TIMESTAMP,
+    FOREIGN KEY (ANSWER_ID) REFERENCES ANSWER(ANSWER_ID)
+);
 ```
 
 # Critical APIs

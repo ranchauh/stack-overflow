@@ -1,8 +1,8 @@
 package com.overflow.stack.update.es;
 
-import com.overflow.stack.es.SoElasticsearchConfiguration;
-import com.overflow.stack.es.model.Question;
-import com.overflow.stack.es.service.QuestionService;
+import com.overflow.stack.commons.SoCommonsConfiguration;
+import com.overflow.stack.commons.model.Question;
+import com.overflow.stack.commons.service.EsQuestionService;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.junit.Assert;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SoElasticsearchConfiguration.class)
+@ContextConfiguration(classes = SoCommonsConfiguration.class)
 @TestPropertySource(value = "classpath:application.properties")
 @Slf4j
 public class ElasticSearchQuestionsIndexTest {
@@ -34,7 +34,7 @@ public class ElasticSearchQuestionsIndexTest {
     private ElasticsearchOperations elasticsearchOperations;
 
     @Autowired
-    private QuestionService questionService;
+    private EsQuestionService esQuestionService;
 
     @Before
     public void before(){
@@ -49,7 +49,7 @@ public class ElasticSearchQuestionsIndexTest {
         question1.setVoteCount(2);
         question1.setCreateTimestamp(System.currentTimeMillis());
         question1.setUpdateTimestamp(System.currentTimeMillis());
-        questionService.save(question1);
+        esQuestionService.save(question1);
 
         Question question = Question.builder().build();
         question.setQuestionId("question2");
@@ -59,7 +59,7 @@ public class ElasticSearchQuestionsIndexTest {
         question.setVoteCount(3);
         question.setCreateTimestamp(System.currentTimeMillis());
         question.setUpdateTimestamp(System.currentTimeMillis());
-        questionService.save(question);
+        esQuestionService.save(question);
 
     }
 
@@ -71,7 +71,7 @@ public class ElasticSearchQuestionsIndexTest {
 
     @Test
     public void testFindAllTags(){
-        List<? extends Terms.Bucket> tags = questionService.findAllTags();
+        List<? extends Terms.Bucket> tags = esQuestionService.findAllTags();
         log.info("Printing unique tags");
         for (Terms.Bucket bucket : tags) {
             log.info(bucket.getKeyAsString());
@@ -80,21 +80,21 @@ public class ElasticSearchQuestionsIndexTest {
 
     @Test
     public void testFindById(){
-        Optional<Question> question = questionService.findById("question1");
+        Optional<Question> question = esQuestionService.findById("question1");
         Assert.assertTrue(question.isPresent());
         Assert.assertEquals("question1",question.get().getQuestionId());
     }
 
     @Test
     public void testFindByText(){
-        Page<Question> result = questionService.findByText("what is", PageRequest.of(0, 10));
+        Page<Question> result = esQuestionService.findByText("what is", PageRequest.of(0, 10));
 
         Assert.assertEquals(2L,result.getTotalElements());
     }
 
     @Test
     public void testFindByTags(){
-        Page<Question> result = questionService.findByTag("java", PageRequest.of(0, 10));
+        Page<Question> result = esQuestionService.findByTag("java", PageRequest.of(0, 10));
 
         Assert.assertEquals(1L,result.getTotalElements());
 
@@ -102,31 +102,31 @@ public class ElasticSearchQuestionsIndexTest {
                 .filter(q -> q.getQuestionId().equalsIgnoreCase("question1"))
                 .findAny().get();
 
-        questionService.deleteById(question.getQuestionId());
+        esQuestionService.deleteById(question.getQuestionId());
 
-        result = questionService.findByText("what is", PageRequest.of(0, 10));
+        result = esQuestionService.findByText("what is", PageRequest.of(0, 10));
 
         Assert.assertEquals(1L,result.getTotalElements());
     }
 
     @Test
     public void testDeleteById(){
-        Page<Question> result = questionService.findByText("what is", PageRequest.of(0, 10));
+        Page<Question> result = esQuestionService.findByText("what is", PageRequest.of(0, 10));
         Assert.assertEquals(2L,result.getTotalElements());
 
         Question question = result.getContent().stream()
                 .filter(q -> q.getQuestionId().equalsIgnoreCase("question1"))
                 .findAny().get();
-        questionService.deleteById(question.getQuestionId());
+        esQuestionService.deleteById(question.getQuestionId());
 
-        result = questionService.findByText("what is", PageRequest.of(0, 10));
+        result = esQuestionService.findByText("what is", PageRequest.of(0, 10));
 
         Assert.assertEquals(1L,result.getTotalElements());
     }
 
     @Test
     public void testUpdateQuestion() throws IOException {
-        Page<Question> result = questionService.findByText("what is", PageRequest.of(0, 10));
+        Page<Question> result = esQuestionService.findByText("what is", PageRequest.of(0, 10));
         Assert.assertEquals(2L,result.getTotalElements());
 
         Question question = result.getContent().stream()
@@ -136,15 +136,15 @@ public class ElasticSearchQuestionsIndexTest {
         question.setQuestionDescription("Can anyone tell me what is java?");
         question.setTags(Arrays.asList("java","core-java","jv"));
         question.setVoteCount(3);
-        questionService.update(question);
+        esQuestionService.update(question);
 
-        result = questionService.findByText("what is", PageRequest.of(0, 10, Sort.by("updateTimestamp").descending()));
+        result = esQuestionService.findByText("what is", PageRequest.of(0, 10, Sort.by("updateTimestamp").descending()));
         Assert.assertEquals(2L,result.getTotalElements());
     }
 
     @Test
     public void testFindTopQuestions() throws IOException {
-        Page<Question> result = questionService.findLatest(PageRequest.of(0, 1, Sort.by("updateTimestamp").descending()));
+        Page<Question> result = esQuestionService.findLatest(PageRequest.of(0, 1, Sort.by("updateTimestamp").descending()));
         Assert.assertEquals(2L,result.getTotalElements());
         Assert.assertEquals(1L,result.getContent().size());
         Question question = result.getContent().stream()

@@ -1,9 +1,9 @@
 package com.overflow.stack.update.es.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.overflow.stack.es.enums.EsAction;
-import com.overflow.stack.es.model.Answer;
-import com.overflow.stack.es.model.Question;
+import com.overflow.stack.commons.enums.EsAction;
+import com.overflow.stack.commons.model.Answer;
+import com.overflow.stack.commons.model.Question;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

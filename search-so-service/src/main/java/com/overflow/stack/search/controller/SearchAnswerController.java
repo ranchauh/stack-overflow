@@ -1,7 +1,7 @@
 package com.overflow.stack.search.controller;
 
 import com.overflow.stack.search.service.SearchAnswerService;
-import com.overflow.stack.es.model.Answer;
+import com.overflow.stack.commons.model.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

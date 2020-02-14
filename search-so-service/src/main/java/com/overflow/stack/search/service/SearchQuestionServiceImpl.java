@@ -1,7 +1,7 @@
 package com.overflow.stack.search.service;
 
-import com.overflow.stack.es.model.Question;
-import com.overflow.stack.es.service.QuestionService;
+import com.overflow.stack.commons.model.Question;
+import com.overflow.stack.commons.service.EsQuestionService;
 import com.overflow.stack.search.model.SearchTagResult;
 import org.elasticsearch.search.aggregations.bucket.MultiBucketsAggregation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,27 +18,27 @@ import java.util.stream.Collectors;
 public class SearchQuestionServiceImpl implements SearchQuestionService {
 
     @Autowired
-    private QuestionService questionService;
+    private EsQuestionService esQuestionService;
 
     public Page<Question> getTopQuestions(int pageNumber, int size){
-        return questionService.findLatest(PageRequest.of(pageNumber, size,
+        return esQuestionService.findLatest(PageRequest.of(pageNumber, size,
                 Sort.by("updateTimestamp").descending()));
     }
 
     public Page<Question> searchQuestionsByText(String searchText, int pageNumber, int size){
-        return questionService.findByText(searchText,PageRequest.of(pageNumber, size));
+        return esQuestionService.findByText(searchText,PageRequest.of(pageNumber, size));
     }
 
     public Page<Question> searchQuestionsByTag(String tag, int pageNumber, int size) {
-        return questionService.findByTag(tag, PageRequest.of(pageNumber, size));
+        return esQuestionService.findByTag(tag, PageRequest.of(pageNumber, size));
     }
 
     public Optional<Question> getQuestionById(String questionId){
-        return questionService.findById(questionId);
+        return esQuestionService.findById(questionId);
     }
 
     public SearchTagResult searchTag(){
-        List<String> tags = questionService.findAllTags().stream()
+        List<String> tags = esQuestionService.findAllTags().stream()
                 .map(MultiBucketsAggregation.Bucket::getKeyAsString)
                 .collect(Collectors.toList());
         return SearchTagResult.builder()
@@ -47,7 +47,7 @@ public class SearchQuestionServiceImpl implements SearchQuestionService {
     }
 
     public SearchTagResult searchTag(String query){
-        List<String> tags = questionService.findAllTags().stream()
+        List<String> tags = esQuestionService.findAllTags().stream()
                 .map(MultiBucketsAggregation.Bucket::getKeyAsString)
                 .filter(t -> match(t,"*"+query+"*"))
                 .collect(Collectors.toList());

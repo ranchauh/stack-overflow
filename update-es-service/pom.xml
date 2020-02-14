@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>com.overflow.stack</groupId>
-            <artifactId>elasticsearch-util</artifactId>
+            <artifactId>so-commons</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -1,10 +1,10 @@
 package com.overflow.stack.update.es.service;
 
-import com.overflow.stack.es.enums.EsAction;
-import com.overflow.stack.es.model.Answer;
-import com.overflow.stack.es.model.Question;
-import com.overflow.stack.es.service.AnswerService;
-import com.overflow.stack.es.service.QuestionService;
+import com.overflow.stack.commons.enums.EsAction;
+import com.overflow.stack.commons.model.Answer;
+import com.overflow.stack.commons.model.Question;
+import com.overflow.stack.commons.service.EsAnswerService;
+import com.overflow.stack.commons.service.EsQuestionService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,30 +13,30 @@ import org.springframework.stereotype.Service;
 public class UpdateEsServiceImpl implements UpdateEsService{
 
     @Autowired
-    private QuestionService questionService;
+    private EsQuestionService esQuestionService;
 
     @Autowired
-    private AnswerService answerService;
+    private EsAnswerService esAnswerService;
 
     @SneakyThrows
     public void updateQuestion(Question question, EsAction esAction){
         if(esAction == EsAction.CREATE) {
-            questionService.save(question);
+            esQuestionService.save(question);
         }else if(esAction == EsAction.UPDATE){
-            questionService.update(question);
+            esQuestionService.update(question);
         }else if(esAction == EsAction.DELETE){
-            questionService.deleteById(question.getQuestionId());
+            esQuestionService.deleteById(question.getQuestionId());
         }
     }
 
     @SneakyThrows
     public void updateAnswer(Answer answer, EsAction esAction){
         if(esAction == EsAction.CREATE) {
-            answerService.save(answer);
+            esAnswerService.save(answer);
         }else if(esAction == EsAction.UPDATE){
-            answerService.update(answer);
+            esAnswerService.update(answer);
         }else if(esAction == EsAction.DELETE){
-            answerService.deleteById(answer.getQuestionId());
+            esAnswerService.deleteById(answer.getQuestionId());
         }
     }
 }

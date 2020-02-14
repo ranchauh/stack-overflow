@@ -1,6 +1,6 @@
 package com.overflow.stack.search.service;
 
-import com.overflow.stack.es.model.Question;
+import com.overflow.stack.commons.model.Question;
 import com.overflow.stack.search.model.SearchTagResult;
 import org.springframework.data.domain.Page;
 

@@ -1,7 +1,7 @@
 package com.overflow.stack.search.service;
 
-import com.overflow.stack.es.model.Answer;
-import com.overflow.stack.es.service.AnswerService;
+import com.overflow.stack.commons.model.Answer;
+import com.overflow.stack.commons.service.EsAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,21 +13,21 @@ import java.util.Optional;
 public class SearchAnswerServiceImpl implements SearchAnswerService{
 
     @Autowired
-    private AnswerService answerService;
+    private EsAnswerService esAnswerService;
 
     public Optional<Answer> getAnswerById(String answerId){
-        return answerService.findById(answerId);
+        return esAnswerService.findById(answerId);
     }
 
     public Page<Answer> getAnswersByParentId(String parentAnswerId,int page,int size){
-        return answerService.findByParentAnswerId(parentAnswerId, PageRequest.of(page,size));
+        return esAnswerService.findByParentAnswerId(parentAnswerId, PageRequest.of(page,size));
     }
 
     public Page<Answer> getAnswersByText(String searchText, int page, int size){
-        return answerService.findByText(searchText,PageRequest.of(page,size));
+        return esAnswerService.findByText(searchText,PageRequest.of(page,size));
     }
 
     public Page<Answer> getAnswerByQuestionId(String questionId, int page, int size){
-        return answerService.findByQuestionId(questionId,PageRequest.of(page,size));
+        return esAnswerService.findByQuestionId(questionId,PageRequest.of(page,size));
     }
 }
